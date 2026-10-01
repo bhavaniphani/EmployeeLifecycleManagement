@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeLifecycleManagement.Pages
 {
-    public class PIMPage:BasePage
+    public class PIMPage
     {
         private readonly IWebDriver driver;
         private readonly WaitHelper waitHelper;
@@ -17,7 +17,7 @@ namespace EmployeeLifecycleManagement.Pages
         private readonly By employeeId =By.XPath("//label[normalize-space()='Employee Id']/following::input[1]");
         private readonly By searchButton =By.XPath("//button[normalize-space()='Search']");
 
-        public PIMPage(IWebDriver driver): base(driver)
+        public PIMPage(IWebDriver driver)
         {
             this.driver = driver;
             waitHelper = new WaitHelper(driver);
@@ -25,33 +25,28 @@ namespace EmployeeLifecycleManagement.Pages
 
         public void OpenPIM()
         {
-            WaitForElement(pimMenu).Click();
-            WaitForPageToLoad();
+            waitHelper.WaitForElement(pimMenu).Click();
+            waitHelper.WaitForPageToLoad();
         }
         public void ClickAdd()
         {
-            WaitForElement(addButton).Click();
-            WaitForPageToLoad();
+            waitHelper.WaitForElement(addButton).Click();
+            waitHelper.WaitForPageToLoad();
         }
         public void SearchEmployeeById(string id)
         {
             waitHelper.WaitForPageToLoad();
 
-            var field = WaitForElement(employeeId);
+            var field = waitHelper.WaitForElement(employeeId);
             field.Clear();
             field.SendKeys(id);
-            WaitForElement(searchButton).Click();
-            WaitForPageToLoad();
+            waitHelper.WaitForElement(searchButton).Click();
+            waitHelper.WaitForPageToLoad();
         }
         public bool IsEmployeeDeleted(string employeeId)
         {
-            WaitForPageToLoad();
-
-            By employeeRow = By.XPath(
-                $"//div[@role='row']" +
-                $"[.//div[normalize-space()='{employeeId}']]"
-            );
-
+            waitHelper.WaitForPageToLoad();
+            By employeeRow = By.XPath($"//div[@role='row']" + $"[.//div[normalize-space()='{employeeId}']]");
             By noRecords = By.XPath("//span[contains(normalize-space(),'No Records Found')]");
 
             try
